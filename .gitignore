@@ -8,6 +8,7 @@ api_info.py
 __pycache__
 .mypy_cache/
 src/config.yaml
+data/
 
 .idea/
 .vscode/
