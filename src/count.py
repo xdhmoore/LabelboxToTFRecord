@@ -11,11 +11,33 @@ def parse_fn(example_proto): #type: ignore
     return tf.io.parse_single_example( #type: ignore
         serialized=example_proto,
         features={
-            'image/object/class/text': tf.io.VarLenFeature(tf.string) #type: ignore
+            'image/object/class/text': tf.io.VarLenFeature(tf.string), #type: ignore
+
+            # TODO assuming VarLen but could be fixed len?
+            'image/object/bbox/xmin': tf.io.VarLenFeature(tf.float32), #type: ignore
+            'image/object/bbox/xmax': tf.io.VarLenFeature(tf.float32), #type: ignore
+            'image/object/bbox/ymin': tf.io.VarLenFeature(tf.float32), #type: ignore
+            'image/object/bbox/ymax': tf.io.VarLenFeature(tf.float32), #type: ignore
+
+            'image/width': tf.io.VarLenFeature(tf.int64), #type: ignore
+            'image/height': tf.io.VarLenFeature(tf.int64) #type: ignore
         }
     ) # type: ignore
 
-def count(infilenames: List[str], displaytotal: bool=False, displaycategories: bool=False) -> None:
+def count(infilenames: List[str], displaytotal: bool=False, displaycategories: bool=False,
+        displaySizes: bool=False) -> None:
+
+    def in_range(range, size):
+        return range[0] < size and size < range[1]
+
+    # Size categories from cocoeval.py
+    small_area = (-1, 32 ** 2)
+    med_area = (32 ** 2, 96 ** 2)
+    large_area = (96 ** 2, 10000 ** 2)
+
+    small_count: int = 0
+    med_count: int = 0
+    large_count: int = 0
 
     all_categories: Set[str] = set()
     total_cat_counts: Dict[str, int] = {}
@@ -30,6 +52,43 @@ def count(infilenames: List[str], displaytotal: bool=False, displaycategories: b
         for row in indataset: # type: ignore
             image_cat_counts: Dict[str,int] = {}
             image_categories: List[str] = [c.decode("UTF-8") for c in tf.sparse.to_dense(row['image/object/class/text']).numpy()] #type: ignore
+
+            image_height: int = tf.sparse.to_dense(row['image/height']).numpy() #type: ignore
+            image_width: int = tf.sparse.to_dense(row['image/width']).numpy() #type: ignore
+
+            #obj_dimensions = \
+            #    zip(
+            # TODO hardcoded * 300 to get pixel values from what seems to be [0,1]. 300 is what my pipeline
+            # is currently set to
+
+            # TODO  this seems to be missing labels, based on what's in labelbox
+            objects = [o for o in zip(*[tf.sparse.to_dense(row[key]).numpy() for key in [
+                'image/object/bbox/xmin',
+                'image/object/bbox/xmax',
+                'image/object/bbox/ymin',
+                'image/object/bbox/ymax'
+            ]])]
+
+            # (xmax - xmin) * (ymax - ymin)
+            object_sizes = [
+                image_width * (o[1] - o[0]) * image_height * (o[3] - o[2])
+                for o in objects]
+
+            if displaySizes:
+                for size in object_sizes:
+                    #if (size > 300 ** 2):
+                    #    print(f"Size is larger than expected: {size}")
+                    #    return
+                    if in_range(small_area, size):
+                        small_count += 1
+                    elif in_range(med_area, size):
+                        med_count += 1
+                    elif in_range(large_area, size):
+                        large_count += 1
+                    else:
+                        print(f"Warning, object size {size} does not fit in size category")
+
+
 
             # Count up all the categories for the image
             for cat in image_categories:
@@ -58,6 +117,12 @@ def count(infilenames: List[str], displaytotal: bool=False, displaycategories: b
     if displaytotal:
         print(total)
 
+    elif displaySizes:
+        # TODO use tabulate
+        print(f"small: {small_count}")
+        print(f"medium: {med_count}")
+        print(f"large: {large_count}")
+
     elif displaycategories:
         table: Dict[str,List[Any]] = { 
             'filename': [os.path.basename(f) for f in infilenames],
@@ -84,10 +149,14 @@ if __name__ == '__main__':
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--total', '-t', action="store_true", help='instead of the the total for each file, display the sum total across all files')
     group.add_argument('--categories', '-c', action="store_true", help='display the number of labels of each category for each file')
+    group.add_argument('--sizes', '-s', action="store_true", help='''
+        display the number of labels of each COCO size for each file. The COCO metric sizes are: small: area < 32^2 pixels,
+        medium: 32^2 < area < 96^2 pixels, large: 96^2 < area < 10000^2 pixels
+    ''')
 
     # TODO Create a histogram of the # of labels of a given category per image across all files?
     # OR use the output of the -c flag to input to another tool
     #group.add_argument('--cat-hist', '-C',  type=str, nargs=1, help='create histogram of the number of labels per image for a given category')
 
     args = parser.parse_args()
-    count(args.infiles, args.total, args.categories)
+    count(args.infiles, args.total, args.categories, args.sizes)
