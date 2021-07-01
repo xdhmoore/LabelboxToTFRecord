@@ -134,6 +134,8 @@ def get_classes_from_labelbox(data):
 def retrieve_data(project_unique_id, api_key, labelbox_dest):
     client = Client(api_key)
     project = client.get_project(project_unique_id)
+    # TODO for some reason, if I limit 10, I only get 24 labels when the images
+    # and online show I should have 27-28
     retrieve_url = project.export_labels()
     with urllib.request.urlopen(retrieve_url) as url:
         response = url.read()
