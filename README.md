@@ -1,24 +1,53 @@
+<p align="center">
+  <img src="https://img.shields.io/badge/python-v3-brightgreen.svg?style=flat-square" alt="python" />
+  <img src="https://img.shields.io/badge/tensorflow-v1-orange.svg?style=flat-square" alt="tensorflow" />
+  <a href="https://github.com/Vets-Who-Code/vwc-site/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/License-NO LICENSE-darkred.svg?style=flat-square" alt="License: NO LICENSE" />
+  </a>
+</p>
+
 # LabelboxToTFRecord
-Download data from Labelbox and convert to TFRecord file format (.tfrecord files) so the data can be used with TensorFlow.
+This repo contains some tools around working with data from the [Labelbox](https://labelbox.com/) platform, as well as creating and shaping [TFRecord](https://www.tensorflow.org/tutorials/load_data/tfrecord#tfrecords_format_details) files (a binary file format for machine learning training data) for use with TensorFlow. It can:
+
+* Download data from labelbox containing images and labels
+* Convert downloaded labelbox data into a .tfrecord file
+* Perform operations on one or more .tfrecord files such as splitting, merging, shuffling, and listing information
 
 ## Installation
 
-### Python Installation using Tensorflow 2:
-You must have TensorFlow's Object Detection API installed, directions for installation can be found here: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2.md
+Installation may be done directly on a machine, via raw Docker, or via a VS Code container image.
 
-Then run
+### Direct Python Installation:
+
+This method supports Tensorflow 2. Use of a pip-compatible virtual environment is encouraged.
+
+1. Install TensorFlow's Object Detection API following the directions [here](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2.md). Choose the Python package method. The Docker instructions here have not been tested with this repo.
+2. Clone this repo:
+```
+git clone git@github.com:xdhmoore/LabelboxToTFRecord.git
+cd LabelboxToTFRecord
+```
+3. Run the following:
 
 `python3 -m pip install -r requirements.txt`
 
-### Docker Installation using Tensorflow 1:
+### Docker Installation:
+Unfortunately, this installation method does not support Tensorflow 2 yet.
 
-Assuming you have a config.yaml file set up (see Examples section):
-
+1. Clone the repo:
+```
+git clone git@github.com:xdhmoore/LabelboxToTFRecord.git
+cd LabelboxToTFRecord
+```
+2. Create a src/config.yaml file based on [src/config.yaml.sample](https://github.com/xdhmoore/LabelboxToTFRecord/blob/master/src/config.yaml.sample). Use the api key and project id found in Labelbox.
+3. Build with docker:
 ```
 # From project root
 docker build -t lb2tf .
 mkdir data
-
+```
+4. Run the following from the project root to download the data from Labelbox and convert it to 2 .tfrecord files via a 20%/80% split. See the Usage info and Examples below for more info:
+```
 # This will run convert.py, downloading the data to a ./data folder
 docker run --mount "type=bind,src=${PWD}/data,dst=/data" lb2tf --split 80 20 --download --labelbox-dest /data/labelbox --tfrecord-dest /data/tfrecord
 ```
@@ -28,7 +57,22 @@ Change the mount src to change where the data is downloaded to.
 
 If you encounter permissions denied errors, check to see that docker hasn't created the `data` directory as root. `chown` or recreate the directory yourself to fix.
 
+### Dev Container Installation
+This method is experimental and may have some issues. As it depends on the "raw docker" method, it also is only setup for Tensorflow 1 currently.
+
+1. Clone the repo, then open VS Code in that folder
+```
+git clone git@github.com:xdhmoore/LabelboxToTFRecord.git
+cd LabelboxToTFRecord
+code .
+```
+2. Click "Trust" the author and then click the "Reopen in Container" button in the bottom right. If this doesn't show up, try selecting "Rebuild and Reopen in Container" from the Command Palette (Ctrl+Shift+P).
+
+*NOTE:* see the note above about building the docker image when it copies a large amount of dowloaded data. When you open VS Code, it will run a docker build.
+
 ## Usage:
+
+The individual script usages are found below:
 
 #### convert.py
 
@@ -122,30 +166,46 @@ If you encounter permissions denied errors, check to see that docker hasn't crea
       --categories, -c  display the number of labels of each category for each
                         file
 
+
+## Tests
+
+To run the tests:
+
+```
+cd src
+python -m unittest
+```
+
+
 ## Examples
 
-Download Labelbox images and convert labels to TFRecord format:
+* Example 1 - Download Labelbox images and convert labels to TFRecord format:
 
-`python convert.py PUID API_KEY`      ---     will download all Labelbox data (images, label file) to ./labelbox, will output tfrecord file to tfrecord/<PUID>.tfrecord
+`python convert.py PUID API_KEY` 
+This will download all Labelbox data (images, label file) to ./labelbox, will output tfrecord file to tfrecord/<PUID>.tfrecord
   
-If you have a config.yaml file specified in the current directory, you can simply use...
+* Example 2 - If you have a config.yaml file specified in the current directory, you can grab and convert the Labelbox data with a simple:
 
 `python convert.py`
 
-To split data into two groups, with 30% in the first and 70% in the second...
+See [src/config.yaml.sample](https://github.com/xdhmoore/LabelboxToTFRecord/blob/master/src/config.yaml.sample) for an example config file.
+
+* Example 3 - To split data into two groups, with 30% in the first and 70% in the second...
 
 `python convert.py --split 30 70`
+This is useful for setting up data sets for cross-validation
 
-To split data into two groups, with 30% in the first and 70% in the second, while downloading images locally...
+* Example 4 - To split data into two groups, with 30% in the first and 70% in the second, while downloading images locally...
 
 `python convert.py --download --split 30 70`
 
-You can also split an existing .tfrecord file into smaller pieces with split.py:
+* Example 5 - You can also split an existing .tfrecord file into smaller pieces with split.py:
 
 `python split.py ./10_record_file.tfrecord 3 2 5`
 
 This will write 3 new files containing 3, 2, and 5 records, respectively.
-To copy a .tfrecord file into a new file, shuffling the records according to a provided random_ints.txt
+
+* Example 6 - To copy a .tfrecord file into a new file, shuffling the records according to a provided random_ints.txt
 file:
 
 `python shuffle.py ./10_record_file.tfrecord random_seq.txt`
@@ -155,15 +215,15 @@ file:
 occurs exactly once, and there is one index per line. This allows you to
 shuffle the tfrecord file using random data like from random.org.
 
-To copy several `.tfrecord` files into a new combined file:
+* Example 7 - To copy several `.tfrecord` files into a new combined file:
 
 `python join.py outfile.tfrecord infile1.tfrecord infile2.tfrecord infile3.tfrecord`
 
-To display the number of records in each of files `pets_train.tfrecord` and `pets_val.tfrecord`...
+* Example 8 - To display the number of records in each of files `pets_train.tfrecord` and `pets_val.tfrecord`...
 
 `python count.py pets_train.tfrecord pets_val.tfrecord`
 
-To display a table of the number of records in each category (shark, dolphin, etc.) in all files with "train" in the name...
+* Example 9 - To display a table of the number of records in each category (shark, dolphin, etc.) in all files with "train" in the name...
 
 `python count.py -c *train*.tfrecord`
 
@@ -182,11 +242,8 @@ filename                               total    sealion    person    dolphin    
 2021-01-26_cv_e_train_2824.tfrecord     2824          1      3132        680     2491     173
 ```
 
-# Tests
+## Contributing
+This project was part of my master's thesis, and is no longer being developed. See also: License
 
-To run the tests:
-
-```
-cd src
-python -m unittest
-```
+## License
+This project currently has [NO LICENSE](https://choosealicense.com/no-permission/). Please see that link as the permissions available in such circumstances may not be what you expect. See [here](https://github.com/caseydaly/LabelboxToTFRecord/issues/13) for a pull request to get MIT approved as the license.
