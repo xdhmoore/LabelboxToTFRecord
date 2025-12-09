@@ -2,9 +2,12 @@
   <img src="https://img.shields.io/badge/python-v3-brightgreen.svg?style=flat-square" alt="python" />
   <img src="https://img.shields.io/badge/tensorflow-v1-orange.svg?style=flat-square" alt="tensorflow" />
   <a href="https://github.com/Vets-Who-Code/vwc-site/blob/master/LICENSE">
-    <img src="https://img.shields.io/badge/License-NO LICENSE-darkred.svg?style=flat-square" alt="License: NO LICENSE" />
+    <img src="https://img.shields.io/badge/License-MIT-brightgreen.svg?style=flat-square" alt="License: MIT" />
   </a>
 </p>
+
+> [!WARNING]
+> This project was part of my master's thesis is and is no longer being developed. Feel free to fork, of course.
 
 # LabelboxToTFRecord
 This repo contains some tools around working with data from the [Labelbox](https://labelbox.com/) platform, as well as creating and shaping [TFRecord](https://www.tensorflow.org/tutorials/load_data/tfrecord#tfrecords_format_details) files (a binary file format for machine learning training data) for use with TensorFlow. It can:
@@ -247,7 +250,7 @@ filename                               total    sealion    person    dolphin    
 ```
 
 ## Contributing
-This project was part of my master's thesis, and is no longer being developed. See also: License
+This project was part of my master's thesis, and is no longer being developed.
 
 ## License
-This project currently has [NO LICENSE](https://choosealicense.com/no-permission/). Please see that link as the permissions available in such circumstances may not be what you expect. See [here](https://github.com/caseydaly/LabelboxToTFRecord/issues/13) for a pull request to get MIT approved as the license.
+This project is under an [MIT license](/LICENSE).
