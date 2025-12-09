@@ -10,7 +10,7 @@
 > This project was part of my master's thesis and is no longer being developed. Feel free to fork, of course.
 
 > [!TIP]
-> For a generated Table of Contents, click the appropriate button above in the GitHub UI.
+> For a generated Table of Contents, click the Outline button above in the GitHub UI.
 
 # LabelboxToTFRecord
 This repo contains some tools around working with data from the [Labelbox](https://labelbox.com/) platform, as well as creating and shaping [TFRecord](https://www.tensorflow.org/tutorials/load_data/tfrecord#tfrecords_format_details) files (a binary file format for machine learning training data) for use with TensorFlow. It can:
