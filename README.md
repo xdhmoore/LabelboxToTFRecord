@@ -177,16 +177,6 @@ The individual script usages are found below. You will want to start with `conve
                         file
 
 
-## Tests
-
-To run the tests:
-
-```
-cd src
-python -m unittest
-```
-
-
 ## Examples
 
 * Example 1 - Download Labelbox images and convert labels to TFRecord format:
@@ -252,6 +242,15 @@ filename                               total    sealion    person    dolphin    
 2021-01-26_cv_c_train_2824.tfrecord     2824          1      3201        686     2493     173
 2021-01-26_cv_d_train_2824.tfrecord     2824          1      2977        729     2488     176
 2021-01-26_cv_e_train_2824.tfrecord     2824          1      3132        680     2491     173
+```
+
+## Tests
+
+To run the tests:
+
+```
+cd src
+python -m unittest
 ```
 
 ## Contributing
