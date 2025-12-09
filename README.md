@@ -12,8 +12,8 @@
 # LabelboxToTFRecord
 This repo contains some tools around working with data from the [Labelbox](https://labelbox.com/) platform, as well as creating and shaping [TFRecord](https://www.tensorflow.org/tutorials/load_data/tfrecord#tfrecords_format_details) files (a binary file format for machine learning training data) for use with TensorFlow. It can:
 
-* Download data from labelbox containing images and labels
-* Convert downloaded labelbox data into a .tfrecord file
+* Download data from Labelbox containing images and labels
+* Convert downloaded Labelbox data into a .tfrecord file
 * Perform operations on one or more .tfrecord files such as splitting, merging, shuffling, and listing information
 
 ## Installation
