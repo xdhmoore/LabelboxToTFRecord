@@ -31,6 +31,8 @@ cd LabelboxToTFRecord
 
 `python3 -m pip install -r requirements.txt`
 
+4. To use, see the usage info for the `convert.py` script below.
+
 ### Docker Installation:
 Unfortunately, this installation method does not support Tensorflow 2 yet.
 
@@ -69,6 +71,8 @@ code .
 2. Click "Trust" the author and then click the "Reopen in Container" button in the bottom right. If this doesn't show up, try selecting "Rebuild and Reopen in Container" from the Command Palette (Ctrl+Shift+P).
 
 *NOTE:* see the note above about building the docker image when it copies a large amount of dowloaded data. When you open VS Code, it will run a docker build.
+
+3. See the usage info around the convert.py script below.
 
 ## Usage:
 
