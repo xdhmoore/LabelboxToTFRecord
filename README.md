@@ -58,9 +58,11 @@ docker run --mount "type=bind,src=${PWD}/data,dst=/data" lb2tf --split 80 20 --d
 ```
 Change the mount src to change where the data is downloaded to.
 
-*NOTE:* if you have downloaded a large amount of data in your project, when `docker build` runs it will copy the data as part of the context which may take a long time. To avoid this, either move downloaded data outside of the project folder before doing a build, use mount settings to save the data outside the project folder to begin with, or use a dockerignore file to ignore the data once downloaded.
+> [!CAUTION]
+> If you have downloaded a large amount of data in your project, when `docker build` runs it will copy the data as part of the context which may take a long time. To avoid this, either move downloaded data outside of the project folder before doing a build, use mount settings to save the data outside the project folder to begin with, or use a dockerignore file to ignore the data once downloaded.
 
-If you encounter permissions denied errors, check to see that docker hasn't created the `data` directory as root. `chown` or recreate the directory yourself to fix.
+> [!TIP]
+> If you encounter permissions denied errors, check to see that docker hasn't created the `data` directory as root. `chown` or recreate the directory yourself to fix.
 
 ### Dev Container Installation
 This method is experimental and may have some issues. As it depends on the "raw docker" method, it also is only setup for Tensorflow 1 currently.
@@ -73,7 +75,8 @@ code .
 ```
 2. Click "Trust" the author and then click the "Reopen in Container" button in the bottom right. If this doesn't show up, try selecting "Rebuild and Reopen in Container" from the Command Palette (Ctrl+Shift+P).
 
-*NOTE:* see the note above about building the docker image when it copies a large amount of dowloaded data. When you open VS Code, it will run a docker build.
+> [!CAUTION]
+> See the Caution above about building the docker image when it copies a large amount of dowloaded data. When you open VS Code, it will run a docker build.
 
 3. See the usage info around the convert.py script below.
 
