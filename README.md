@@ -7,7 +7,7 @@
 </p>
 
 > [!WARNING]
-> This project was part of my master's thesis is and is no longer being developed. Feel free to fork, of course.
+> This project was part of my master's thesis and is no longer being developed. Feel free to fork, of course.
 
 # LabelboxToTFRecord
 This repo contains some tools around working with data from the [Labelbox](https://labelbox.com/) platform, as well as creating and shaping [TFRecord](https://www.tensorflow.org/tutorials/load_data/tfrecord#tfrecords_format_details) files (a binary file format for machine learning training data) for use with TensorFlow. It can:
