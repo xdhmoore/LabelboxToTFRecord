@@ -76,7 +76,7 @@ code .
 
 ## Usage:
 
-The individual script usages are found below:
+The individual script usages are found below. You will want to start with `convert.py` as it is the script that actually downloads from Labelbox and converts the data to .tfrecords.
 
 #### convert.py
 
