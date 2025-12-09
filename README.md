@@ -191,34 +191,36 @@ python -m unittest
 
 * Example 1 - Download Labelbox images and convert labels to TFRecord format:
 
-`python convert.py PUID API_KEY` 
+`python convert.py PUID API_KEY`<br>
+
 This will download all Labelbox data (images, label file) to ./labelbox, will output tfrecord file to tfrecord/<PUID>.tfrecord
   
 * Example 2 - If you have a config.yaml file specified in the current directory, you can grab and convert the Labelbox data with a simple:
 
-`python convert.py`
+`python convert.py`<br>
 
 See [src/config.yaml.sample](https://github.com/xdhmoore/LabelboxToTFRecord/blob/master/src/config.yaml.sample) for an example config file.
 
 * Example 3 - To split data into two groups, with 30% in the first and 70% in the second...
 
-`python convert.py --split 30 70`
+`python convert.py --split 30 70`<br>
+
 This is useful for setting up data sets for cross-validation
 
 * Example 4 - To split data into two groups, with 30% in the first and 70% in the second, while downloading images locally...
 
-`python convert.py --download --split 30 70`
+`python convert.py --download --split 30 70`<br>
 
 * Example 5 - You can also split an existing .tfrecord file into smaller pieces with split.py:
 
-`python split.py ./10_record_file.tfrecord 3 2 5`
+`python split.py ./10_record_file.tfrecord 3 2 5`<br>
 
 This will write 3 new files containing 3, 2, and 5 records, respectively.
 
 * Example 6 - To copy a .tfrecord file into a new file, shuffling the records according to a provided random_ints.txt
 file:
 
-`python shuffle.py ./10_record_file.tfrecord random_seq.txt`
+`python shuffle.py ./10_record_file.tfrecord random_seq.txt`<br>
 
 `random_seq.txt` should be a file of all the indices into the tfrecord file,
 [0,N), where N is the number of records in the tfrecord file, each index
@@ -227,11 +229,11 @@ shuffle the tfrecord file using random data like from random.org.
 
 * Example 7 - To copy several `.tfrecord` files into a new combined file:
 
-`python join.py outfile.tfrecord infile1.tfrecord infile2.tfrecord infile3.tfrecord`
+`python join.py outfile.tfrecord infile1.tfrecord infile2.tfrecord infile3.tfrecord`<br>
 
 * Example 8 - To display the number of records in each of files `pets_train.tfrecord` and `pets_val.tfrecord`...
 
-`python count.py pets_train.tfrecord pets_val.tfrecord`
+`python count.py pets_train.tfrecord pets_val.tfrecord`<br>
 
 * Example 9 - To display a table of the number of records in each category (shark, dolphin, etc.) in all files with "train" in the name...
 
@@ -253,7 +255,7 @@ filename                               total    sealion    person    dolphin    
 ```
 
 ## Contributing
-This project was part of my master's thesis, and is no longer being developed.
+This project was part of my master's thesis and is no longer being developed.
 
 ## License
 This project is under an [MIT license](/LICENSE).
