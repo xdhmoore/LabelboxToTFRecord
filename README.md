@@ -186,7 +186,7 @@ The individual script usages are found below. You will want to start with `conve
 
 `python convert.py PUID API_KEY`<br>
 
-This will download all Labelbox data (images, label file) to ./labelbox, will output tfrecord file to tfrecord/<PUID>.tfrecord
+This will download all Labelbox data (images, label file) to the folder ./labelbox, and will create a tfrecord file at tfrecord/<PUID>.tfrecord
   
 * Example 2 - If you have a config.yaml file specified in the current directory, you can grab and convert the Labelbox data with a simple:
 
